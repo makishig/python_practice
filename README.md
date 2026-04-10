@@ -1,2 +1,2 @@
 # python_practice
-kdfkjfdlk
+python基礎演習のまとめ
