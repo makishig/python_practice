@@ -1,6 +1,7 @@
 #時間制限を追加
 #ゲームオーバー画面を追加
 #リスタート機能を追加
+#単語落下
 import pygame
 import random
 import time   #変更点　timeモジュール追加
@@ -39,6 +40,11 @@ words = [
 # ランダムに単語選択
 current_word = random.choice(words)
 
+#単語の座標
+word_x = 300
+word_y = 50
+word_speed = 1
+
 # 入力中の文字
 typed_text = ""
 
@@ -46,7 +52,7 @@ typed_text = ""
 score = 0
 
 #制限時間設定
-time_limit = 10
+time_limit = 15
 
 #開始時間
 start_time = time.time()  #現在時間を秒で取得
@@ -61,10 +67,16 @@ def reset_game():
     global score
     global start_time
     global game_over
-    
+    global word_x
+    global word_y
+    global word_speed
+        
     current_word = random.choice(words)
     typed_text = ''
     score = 0
+    word_x = 300
+    word_y = 50
+    word_speed = 2
     start_time =time.time()
     game_over = False
     
@@ -107,6 +119,7 @@ while running:
                     score -=1
                 
                 current_word = random.choice(words)
+                word_y = 50 #単語の位置をリセット・・・・・・・・・・・・・・・・・・・・・・
                 typed_text = ""
 
             # バックスペース
@@ -130,9 +143,12 @@ while running:
         game_over = True
         
     if not game_over: #通常の画面
+        
+        #単語の落下・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+        word_y += word_speed
         #単語の描画
         word_surface = font.render(current_word, True, BLACK)
-        screen.blit(word_surface, (250, 100))
+        screen.blit(word_surface, (word_x, word_y))
 
         # 入力文字描画
         text_surface = small_font.render(typed_text, True, BLACK)
@@ -145,6 +161,10 @@ while running:
         #残り時間の描画
         time_surface = small_font.render(f'Time: {remaining_time}', True, BLACK)
         screen.blit(time_surface, (20, 70))
+        
+        #単語が下まで行ったらゲームオーバー
+        if word_y > HEIGHT:
+            game_over = True
     else:
         #ゲームオーバー画面
         game_over_surface = font.render('GAME OVER', True, BLACK)
