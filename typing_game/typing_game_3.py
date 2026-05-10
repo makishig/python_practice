@@ -94,7 +94,7 @@ while running:
                 if event.key == pygame.K_ESCAPE:
                     running = False
                 if event.key == pygame.K_r:
-                    reset_game()
+                    reset_game()  #ここからは明日しよう
             
     
             
